@@ -14,6 +14,7 @@ export class Box {
 	private _renderedVisibility: string = "?";
 	private _renderedBorderLeft: string = "?";
 	private _renderedBorderRight: string = "?";
+	private _renderedComment: string = "";
 	private _renderedBackgroundColor: string = "?";
 	constructor(channel: number, color: string) {
 		this.container.style.background = ColorConfig.uiWidgetBackground;
@@ -63,7 +64,16 @@ export class Box {
 	}
 	// These cache the value given to them, since they're apparently quite
 	// expensive to set.
-	public setVisibility(visibility: string): void {
+	public setComment(comment: string): void {
+		if (this._renderedComment == comment) return;
+		this._renderedComment = comment;
+		if (comment == "") {
+			this.container.classList.remove("hasComment");
+		} else {
+			this.container.classList.add("hasComment");
+		}
+	}
+		public setVisibility(visibility: string): void {
 		if (this._renderedVisibility != visibility) {
 			this.container.style.visibility = visibility;
 			this._renderedVisibility = visibility;
@@ -151,6 +161,7 @@ export class ChannelRow {
 			else {
 				box.setBorderRight("none");
             }
+			box.setComment(this._doc.song.getComment(this.index, i) || "");
 		}
 	}
 }

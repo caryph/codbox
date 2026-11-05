@@ -6,6 +6,8 @@ import { BarScrollBar } from "./BarScrollBar";
 import { BeatsPerBarPrompt } from "./BeatsPerBarPrompt";
 import { Change, ChangeGroup } from "./Change";
 import { ChannelSettingsPrompt } from "./ChannelSettingsPrompt";
+import { CommentPrompt } from "./CommentPrompt";
+import { SongLibraryPrompt } from "./SongLibraryPrompt";
 import { ColorConfig, ChannelColors } from "./ColorConfig";
 import { CustomChipPrompt } from "./CustomChipPrompt";
 import { CustomFilterPrompt } from "./CustomFilterPrompt";
@@ -772,6 +774,7 @@ export class SongEditor {
         option({ value: "viewPlayer" }, "▶ View in Song Player (⇧P)"),
         option({ value: "copyEmbed" }, "⎘ Copy HTML Embed Code"),
         option({ value: "songRecovery" }, "⚠ Recover Recent Song... (`)"),
+        option({ value: "songLibrary" }, "Song Library... (⇧O)"),
     );
     private readonly _editMenu: HTMLSelectElement = select({ style: "width: 100%;" },
         option({ selected: true, disabled: true, hidden: false }, "Edit"), // todo: "hidden" should be true but looks wrong on mac chrome, adds checkmark next to first visible option even though it's not selected. :(
@@ -791,6 +794,7 @@ export class SongEditor {
         option({ value: "transposeDown" }, "Move Notes Down (- or ⇧-)"),
         option({ value: "moveNotesSideways" }, "Move All Notes Sideways... (W)"),
 	    option({ value: "generateEuclideanRhythm" }, "Generate Euclidean Rhythm... (E)"),
+        option({ value: "addComment" }, "Add/Edit Comment... (T)"),
         option({ value: "beatsPerBar" }, "Change Beats Per Bar... (⇧B)"),
         option({ value: "barCount" }, "Change Song Length... (L)"),
         option({ value: "channelSettings" }, "Channel Settings... (Q)"),
@@ -2114,6 +2118,12 @@ export class SongEditor {
                     break;
                 case "channelSettings":
                     this.prompt = new ChannelSettingsPrompt(this._doc);
+                    break;
+                case "comment":
+                    this.prompt = new CommentPrompt(this._doc);
+                    break;
+                case "songLibrary":
+                    this.prompt = new SongLibraryPrompt(this._doc);
                     break;
                 case "limiterSettings":
                     this.prompt = new LimiterPrompt(this._doc, this);
@@ -4255,6 +4265,14 @@ export class SongEditor {
 			}
                 }
                 break;
+            case 84: { // t - add/edit a comment on the selected bar
+                if (canPlayNotes) break;
+                if (needControlForShortcuts == (event.ctrlKey || event.metaKey) && !this._doc.selection.boxSelectionActive) {
+                    this._openPrompt("comment");
+                    event.preventDefault();
+                }
+                break;
+            }
             case 83: // s
                 if (canPlayNotes) break;
                 if (event.ctrlKey || event.metaKey) {
@@ -4278,6 +4296,9 @@ export class SongEditor {
                 if (canPlayNotes) break;
                 if (event.ctrlKey || event.metaKey) {
                     this._openPrompt("import");
+                    event.preventDefault();
+                } else if (event.shiftKey && needControlForShortcuts == (event.ctrlKey || event.metaKey)) {
+                    this._openPrompt("songLibrary");
                     event.preventDefault();
                 }
                 break;
@@ -5076,6 +5097,9 @@ export class SongEditor {
             case "songRecovery":
                 this._openPrompt("songRecovery");
                 break;
+            case "songLibrary":
+                this._openPrompt("songLibrary");
+                break;
             case "toggleElectronMenu":
                 if (OFFLINE) {
                     toggleElectronMenu();
@@ -5125,6 +5149,9 @@ export class SongEditor {
                 break;
             case "selectChannel":
                 this._doc.selection.selectChannel();
+                break;
+            case "addComment":
+                this._openPrompt("comment");
                 break;
             case "duplicatePatterns":
                 this._doc.selection.duplicatePatterns();

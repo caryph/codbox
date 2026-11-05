@@ -12,6 +12,7 @@ import { Preferences } from "./Preferences";
 import { Change } from "./Change";
 import { ChangeNotifier } from "./ChangeNotifier";
 import { ChangeSong, setDefaultInstruments, discardInvalidPatternInstruments, ChangeHoldingModRecording} from "./changes";
+import { scheduleAutosave, flushAutosave, migrateRecoverySongs, findSongUidByData } from "./SongStorage";
 
 interface HistoryState {
 	canUndo: boolean;
@@ -104,6 +105,15 @@ export class SongDocument {
 		this._replaceState(state, songString);
 		window.addEventListener("hashchange", this._whenHistoryStateChanged);
 		window.addEventListener("popstate", this._whenHistoryStateChanged);
+
+		// Set up persistent song storage: adopt an existing library entry if this
+		// exact song was saved before, migrate old recovery snapshots, and flush
+		// any pending auto-save when the page is hidden or closed.
+		this._adoptLibraryEntry(songString);
+		migrateRecoverySongs();
+		window.addEventListener("pagehide", flushAutosave);
+		window.addEventListener("beforeunload", flushAutosave);
+		document.addEventListener("visibilitychange", () => { if (document.visibilityState == "hidden") flushAutosave(); });
 			
 		this.bar = state.bar | 0;
 		this.channel = state.channel | 0;
@@ -231,6 +241,7 @@ export class SongDocument {
 			} catch (error) {
 				errorAlert(error);
 			}
+			this._adoptLibraryEntry(this.song.toBase64String());
 			this.prompt = state.prompt;
 			if (this.prefs.displayBrowserUrl) {
 				this._replaceState(state, this.song.toBase64String());
@@ -360,6 +371,8 @@ export class SongDocument {
 			this._resetSongRecoveryUid();
 		} else {
 			this._recovery.saveVersion(this._recoveryUid, this.song.title, hash);
+			// Auto-save the song into the persistent local library.
+			scheduleAutosave(this._recoveryUid, this.song.title, hash);
 		}
 		let state: HistoryState = {canUndo: true, sequenceNumber: this._sequenceNumber, bar: this.bar, channel: this.channel, instrument: this.viewedInstrument[this.channel], recoveryUid: this._recoveryUid, prompt: this.prompt, selection: this.selection.toJSON()};
 		if (this._stateShouldBePushed) {
@@ -392,6 +405,25 @@ export class SongDocument {
 		
 	private _resetSongRecoveryUid(): void {
 		this._recoveryUid = generateUid();
+	}
+
+	// The library entry id that the currently open song is saved under.
+	public get libraryUid(): string {
+		return this._recoveryUid;
+	}
+
+	// If this exact song data is already in the library, continue that song's
+	// lineage (reuse its uid and creation time) instead of saving a duplicate.
+	private _adoptLibraryEntry = (data: string): void => {
+		const uidBeforeAdoption: string = this._recoveryUid;
+		findSongUidByData(data).then(uid => {
+			// Don't adopt if the song changed while the lookup was pending.
+			if (uid != null && this._recoveryUid == uidBeforeAdoption) {
+				this._recoveryUid = uid;
+			}
+		}).catch(error => {
+			console.warn("Could not adopt library entry:", error);
+		});
 	}
 		
 	public openPrompt(prompt: string): void {

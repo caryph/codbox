@@ -1328,7 +1328,166 @@ html {
 	align-items: center;
 	justify-content: center;
 	box-sizing: border-box;
+	position: relative;
 	padding-top: 1px;
+}
+.beepboxEditor .channelBox.hasComment::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 0;
+	height: 0;
+	border-top: 11px solid #ffaa00;
+	border-left: 11px solid transparent;
+	pointer-events: none;
+}
+.beepboxEditor .commentToolTip {
+	position: absolute;
+	width: max-content;
+	max-width: 240px;
+	box-sizing: border-box;
+	padding: 4px 8px;
+	background: var(--ui-widget-background, #444);
+	border: 1px solid var(--ui-widget-focus, #777);
+	color: var(--primary-text, white);
+	font-size: 12px;
+	line-height: 1.4;
+	white-space: pre-wrap;
+	border-radius: 4px;
+	pointer-events: none;
+	z-index: 100;
+	display: none;
+}
+.beepboxEditor .songLibraryHeader {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+}
+.beepboxEditor .songLibraryHeader p {
+	margin: 0;
+	color: var(--secondary-text, #999);
+	font-size: smaller;
+}
+.beepboxEditor .songLibraryGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+	gap: 8px;
+}
+.beepboxEditor .songLibraryCard {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid var(--ui-widget-focus, #777);
+	border-radius: 5px;
+	overflow: hidden;
+	cursor: pointer;
+	transition: border-color 0.12s;
+}
+.beepboxEditor .songLibraryCard:hover {
+	border-color: var(--link-accent, #98f);
+}
+.beepboxEditor .songLibraryCard.currentSong {
+	border-color: var(--link-accent, #98f);
+}
+.beepboxEditor .songLibraryThumbRow {
+	position: relative;
+	line-height: 0;
+}
+.beepboxEditor .songLibraryThumbRow canvas {
+	width: 100%;
+	height: auto;
+	position: relative;
+	display: block;
+}
+.beepboxEditor .songLibraryActions {
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	display: flex;
+	gap: 4px;
+	opacity: 0;
+	transition: opacity 0.12s;
+}
+.beepboxEditor .songLibraryCard:hover .songLibraryActions {
+	opacity: 1;
+}
+.beepboxEditor .songLibraryButton {
+	height: 22px;
+	padding: 0 8px;
+	font-size: 11px;
+	line-height: 20px;
+	border-radius: 11px;
+	background: var(--ui-widget-background, #444);
+	border: 1px solid var(--ui-widget-focus, #777);
+	color: var(--primary-text, white);
+	cursor: pointer;
+	transition: border-color 0.12s, background 0.12s;
+}
+.beepboxEditor .songLibraryButton:hover {
+	background: var(--ui-widget-focus, #777);
+	border-color: var(--link-accent, #98f);
+}
+.beepboxEditor .songLibraryButton.dangerButton:hover {
+	border-color: var(--error-text, #f43);
+}
+.beepboxEditor .songLibraryInfo {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 2px;
+	padding: 5px 8px;
+	text-align: left;
+}
+.beepboxEditor .songLibraryNameRow {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+.beepboxEditor .songLibraryName {
+	flex-grow: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-weight: bold;
+}
+.beepboxEditor .songLibraryMeta {
+	color: var(--secondary-text, #999);
+	font-size: 11px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.beepboxEditor .songLibraryCurrentChip {
+	flex-shrink: 0;
+	padding: 1px 7px;
+	font-size: 10px;
+	border-radius: 8px;
+	color: var(--inverted-text, black);
+	background: var(--link-accent, #98f);
+}
+.beepboxEditor .songLibraryPager {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	margin-top: 8px;
+}
+.beepboxEditor .songLibraryPagerButton {
+	width: 28px;
+	height: 22px;
+	border-radius: 11px;
+	background: var(--ui-widget-background, #444);
+	border: 1px solid var(--ui-widget-focus, #777);
+	color: var(--primary-text, white);
+	cursor: pointer;
+}
+.beepboxEditor .songLibraryPagerButton:disabled {
+	opacity: 0.4;
+	cursor: default;
+}
+.beepboxEditor .songLibraryPagerButton:hover:not(:disabled) {
+	background: var(--ui-widget-focus, #777);
 }
 .beepboxEditor .channelBoxLabel {
 	font-size: 20px;

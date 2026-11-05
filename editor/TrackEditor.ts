@@ -33,11 +33,13 @@ export class TrackEditor {
 		this._playhead,
 	);
 	private readonly _select: HTMLSelectElement = HTML.select({class: "trackSelectBox", style: "background: none; border: none; appearance: none; border-radius: initial; box-shadow: none; color: transparent; position: absolute; touch-action: none;"});
+	private readonly _commentToolTip: HTMLDivElement = HTML.div({class: "commentToolTip"});
 	public readonly container: HTMLElement = HTML.div({class: "noSelection", style: `background-color: ${ColorConfig.editorBackground}; position: relative; overflow: hidden;`},
 		this._channelRowContainer,
 		this._svg,
 		this._select,
-		this._barDropDown
+		this._barDropDown,
+		this._commentToolTip
 	);
 	private readonly _channels: ChannelRow[] = [];
 	private readonly _barNumbers: SVGTextElement[] = [];
@@ -99,6 +101,9 @@ export class TrackEditor {
 		this._barDropDown.addEventListener("change", this._barDropDownHandler);
 		this._barDropDown.addEventListener("mousedown", this._barDropDownGetOpenedPosition);
 
+		this.container.addEventListener("mouseleave", () => {
+			this._commentToolTip.style.display = "none";
+		});
 	}
 
 	private _barDropDownGetOpenedPosition = (event: MouseEvent): void => {
@@ -278,6 +283,36 @@ export class TrackEditor {
 		this._updatePreview();
 	}
 		
+	private _updateCommentToolTip(): void {
+		// Note: this._mouseOver flickers when crossing element boundaries within
+		// the svg (mouseover/out bubble), so visibility is determined geometrically
+		// from the mouse position instead.
+		const insideTrack: boolean = this._mouseX >= 0 && this._mouseX < this._renderedEditorWidth
+			&& this._mouseY >= Config.barEditorHeight
+			&& this._mouseY < Config.barEditorHeight + this._renderedEditorHeight;
+		const comment: string | null = (!this._touchMode && insideTrack) ? this._doc.song.getComment(this._mouseChannel, this._mouseBar) : null;
+		if (comment == null) {
+			this._commentToolTip.style.display = "none";
+			return;
+		}
+		this._commentToolTip.textContent = comment;
+		this._commentToolTip.style.display = "block";
+		const cellLeft: number = this._barWidth * this._mouseBar;
+		const cellTop: number = Config.barEditorHeight + ChannelRow.patternHeight * this._mouseChannel;
+		const containerWidth: number = this._renderedEditorWidth;
+		const containerHeight: number = this._renderedEditorHeight + Config.barEditorHeight;
+		const tooltipWidth: number = this._commentToolTip.offsetWidth;
+		const tooltipHeight: number = this._commentToolTip.offsetHeight;
+		let left: number = cellLeft + this._barWidth / 2 - tooltipWidth / 2;
+		left = Math.max(2, Math.min(containerWidth - tooltipWidth - 2, left));
+		// Show the tooltip above the hovered cell, or below it for the top row.
+		let top: number = cellTop - tooltipHeight - 4;
+		if (top < 2) top = cellTop + ChannelRow.patternHeight + 4;
+		if (top + tooltipHeight > containerHeight - 2) top = containerHeight - tooltipHeight - 2;
+		this._commentToolTip.style.left = left + "px";
+		this._commentToolTip.style.top = top + "px";
+	}
+
 	private _updatePreview(): void {
 		let channel: number = this._mouseChannel;
 		let bar: number = this._mouseBar;
@@ -289,6 +324,7 @@ export class TrackEditor {
 			
 		const selected: boolean = (bar == this._doc.bar && channel == this._doc.channel);
 		const overTrackEditor: boolean = (this._mouseY >= Config.barEditorHeight);
+		this._updateCommentToolTip();
 			
 		if (this._mouseDragging && this._mouseStartBar != this._mouseBar) {
 

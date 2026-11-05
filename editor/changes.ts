@@ -4875,3 +4875,28 @@ export class ChangeSetEnvelopeType extends Change {
         }
     }
 }
+
+export class ChangeComment extends Change {
+    constructor(doc: SongDocument, channel: number, bar: number, text: string) {
+        super();
+        const trimmedText: string = text.trim().substring(0, 250);
+        const index: number = doc.song.comments.findIndex(comment => comment.channel == channel && comment.bar == bar);
+        if (trimmedText.length == 0) {
+            // An empty comment removes the comment.
+            if (index != -1) {
+                doc.song.comments.splice(index, 1);
+                doc.notifier.changed();
+                this._didSomething();
+            }
+        } else {
+            if (index != -1) {
+                if (doc.song.comments[index].text == trimmedText) return;
+                doc.song.comments.splice(index, 1);
+            }
+            doc.song.comments.push({ channel: channel, bar: bar, text: trimmedText });
+            doc.song.comments.sort((a, b) => a.channel - b.channel || a.bar - b.bar);
+            doc.notifier.changed();
+            this._didSomething();
+        }
+    }
+}

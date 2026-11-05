@@ -257,7 +257,7 @@ const enum SongTagCode {
 	feedbackEnvelope    = CharCode.V, // added in BeepBox URL version 6, DEPRECATED
 	pulseWidth          = CharCode.W, // added in BeepBox URL version 7
 	aliases             = CharCode.X, // added in JummBox URL version 4 for aliases, DEPRECATED, [UB] repurposed for PWM decimal offset (DEPRECATED as well)
-//	                    = CharCode.Y,
+	comments            = CharCode.Y, // added in UltraBox URL version 6 for bar comments
 //	                    = CharCode.Z,
 //	                    = CharCode.NUM_0,
 //	                    = CharCode.NUM_1,
@@ -2844,6 +2844,12 @@ export class Channel {
     public name: string = "";
 }
 
+export interface CommentEntry {
+    channel: number;
+    bar: number;
+    text: string;
+}
+
 export class Song {
     private static readonly _format: string = Config.jsonFormat;
     private static readonly _oldestBeepboxVersion: number = 2;
@@ -2853,7 +2859,10 @@ export class Song {
     private static readonly _oldestGoldBoxVersion: number = 1;
     private static readonly _latestGoldBoxVersion: number = 4;
     private static readonly _oldestUltraBoxVersion: number = 1;
-    private static readonly _latestUltraBoxVersion: number = 5;
+    private static readonly _latestUltraBoxVersion: number = 6;
+    // Songs without comments are still written as one version below the latest
+    // so that older UltraBox builds can open them. Only songs that actually
+    // contain comments are written with the latest version.
     // One-character variant detection at the start of URL to distinguish variants such as JummBox, Or Goldbox. "j" and "g" respectively
 	//also "u" is ultrabox lol
     private static readonly _variant = 0x75; //"u" ~ ultrabox
@@ -2878,6 +2887,7 @@ export class Song {
     public noiseChannelCount: number;
     public modChannelCount: number;
     public readonly channels: Channel[] = [];
+    public readonly comments: CommentEntry[] = [];
     public limitDecay: number = 4.0;
     public limitRise: number = 4000.0;
     public compressionThreshold: number = 1.0;
@@ -2887,6 +2897,13 @@ export class Song {
     public masterGain: number = 1.0;
     public inVolumeCap: number = 0.0;
     public outVolumeCap: number = 0.0;
+
+    public getComment(channel: number, bar: number): string | null {
+        for (const comment of this.comments) {
+            if (comment.channel == channel && comment.bar == bar) return comment.text;
+        }
+        return null;
+    }
 
     constructor(string?: string) {
         if (string != undefined) {
@@ -3030,6 +3047,8 @@ export class Song {
         this.title = "Untitled";
         this.titleNotifier.forEach(o => o());
 
+        this.comments.length = 0;
+
         if (andResetChannels) {
             this.pitchChannelCount = 3;
             this.noiseChannelCount = 1;
@@ -3074,7 +3093,7 @@ export class Song {
         let buffer: number[] = [];
 
         buffer.push(Song._variant);
-        buffer.push(base64IntToCharCode[Song._latestUltraBoxVersion]);
+        buffer.push(base64IntToCharCode[this.comments.length > 0 ? Song._latestUltraBoxVersion : Song._latestUltraBoxVersion - 1]);
 
         // Length of the song name string
         buffer.push(SongTagCode.songTitle);
@@ -3691,7 +3710,22 @@ export class Song {
         buffer.push(base64IntToCharCode[digits.length]);
         Array.prototype.push.apply(buffer, digits); // append digits to buffer.
         bits.encodeBase64(buffer);
-	    
+
+        // Write comments, but only if there are any!
+        if (this.comments.length > 0) {
+            buffer.push(SongTagCode.comments);
+            buffer.push(base64IntToCharCode[this.comments.length >> 6], base64IntToCharCode[this.comments.length & 0x3f]);
+            for (const comment of this.comments) {
+                buffer.push(base64IntToCharCode[comment.channel]);
+                buffer.push(base64IntToCharCode[comment.bar >> 6], base64IntToCharCode[comment.bar & 0x3f]);
+                const encodedComment: string = encodeURIComponent(comment.text);
+                buffer.push(base64IntToCharCode[encodedComment.length >> 6], base64IntToCharCode[encodedComment.length & 0x3f]);
+                for (let i: number = 0; i < encodedComment.length; i++) {
+                    buffer.push(encodedComment.charCodeAt(i));
+                }
+            }
+        }
+
         const maxApplyArgs: number = 64000;
 	    			            let customSamplesStr = "";
             if(EditorConfig.customSamples != undefined && EditorConfig.customSamples.length > 0){
@@ -5798,6 +5832,20 @@ export class Song {
                     }
                 }
             } break;
+            case SongTagCode.comments: {
+                if (!fromUltraBox || version < 6) break;
+                const commentCount: number = (base64CharCodeToInt[compressed.charCodeAt(charIndex++)] << 6) + base64CharCodeToInt[compressed.charCodeAt(charIndex++)];
+                for (let i: number = 0; i < commentCount; i++) {
+                    const commentChannel: number = base64CharCodeToInt[compressed.charCodeAt(charIndex++)];
+                    const commentBar: number = (base64CharCodeToInt[compressed.charCodeAt(charIndex++)] << 6) + base64CharCodeToInt[compressed.charCodeAt(charIndex++)];
+                    const commentLength: number = (base64CharCodeToInt[compressed.charCodeAt(charIndex++)] << 6) + base64CharCodeToInt[compressed.charCodeAt(charIndex++)];
+                    const commentText: string = decodeURIComponent(compressed.substring(charIndex, charIndex + commentLength));
+                    charIndex += commentLength;
+                    if (commentChannel < this.getChannelCount() && commentBar < this.barCount && commentText.length > 0) {
+                        this.comments.push({ channel: commentChannel, bar: commentBar, text: commentText });
+                    }
+                }
+            } break;
             default: {
                 throw new Error("Unrecognized song tag code " + String.fromCharCode(command) + " at index " + (charIndex - 1) + " " + compressed.substring(/*charIndex - 2*/0, charIndex));
             } break;
@@ -6170,6 +6218,10 @@ export class Song {
             "patternInstruments": this.patternInstruments,
             "channels": channelArray,
         };
+
+        if (this.comments.length > 0) {
+            result["comments"] = this.comments.map(comment => ({ "channel": comment.channel, "bar": comment.bar, "text": comment.text }));
+        }
 
         if (EditorConfig.customSamples != null && EditorConfig.customSamples.length > 0) {
             result["customSamples"] = EditorConfig.customSamples;
@@ -6761,6 +6813,18 @@ export class Song {
         Array.prototype.push.apply(this.channels, newPitchChannels);
         Array.prototype.push.apply(this.channels, newNoiseChannels);
         Array.prototype.push.apply(this.channels, newModChannels);
+
+        if (Array.isArray(jsonObject["comments"])) {
+            const commentObjects: any[] = jsonObject["comments"];
+            for (const commentObject of commentObjects) {
+                const channel: number = commentObject["channel"] | 0;
+                const bar: number = commentObject["bar"] | 0;
+                const text: string = String(commentObject["text"]);
+                if (text.length > 0 && channel < this.getChannelCount() && bar < this.barCount) {
+                    this.comments.push({ channel: channel, bar: bar, text: text });
+                }
+            }
+        }
 
         if (Config.willReloadForCustomSamples) {
             window.location.hash = this.toBase64String();
