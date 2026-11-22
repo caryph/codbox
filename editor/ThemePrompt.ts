@@ -11,7 +11,7 @@ const { button, div, h2, select, option, optgroup } = HTML;
 export class ThemePrompt implements Prompt {
 	private readonly _themeSelect: HTMLSelectElement = select({ style: "width: 100%;" },
 		optgroup({ label: "Default Themes" },
-			option({ value: "cod" }, "Cod"),
+			option({ value: "cod salmon" }, "Cod Salmon"),
 			option({ value: "ultrabox dark" }, "UltraBox"),
 			option({ value: "forest" }, "Forest"),
 			option({ value: "canyon" }, "Canyon"),
@@ -35,6 +35,12 @@ export class ThemePrompt implements Prompt {
 			option({ value: "poly" }, "Poly"),
 			option({ value: "blutonium" }, "Blutonium"),
 			option({ value: "slushie" }, "Slushie"),
+		),
+		optgroup({ label: "Codbox Themes" },
+			option({ value: "viridescent" }, "Viridescent"),
+			option({ value: "solarized osaka" }, "Solarized Osaka"),
+			option({ value: "gruvbox dark" }, "Gruvbox Dark"),
+			option({ value: "watermelon" }, "Watermelon"),
 		),
 		optgroup({ label: "Mod Themes" },
 			option({ value: "dark classic" }, "BeepBox Dark"),
@@ -87,10 +93,11 @@ export class ThemePrompt implements Prompt {
 		),
 		this._cancelButton,
 	);
-	private readonly lastTheme: string | null = window.localStorage.getItem("colorTheme")
+	private lastTheme: string | null = window.localStorage.getItem("colorTheme")
 
 	constructor(private _doc: SongDocument) {
 		if (this.lastTheme != null) {
+			this.lastTheme = ColorConfig.resolveThemeName(this.lastTheme);
 			this._themeSelect.value = this.lastTheme;
 		}
 		this._okayButton.addEventListener("click", this._saveChanges);

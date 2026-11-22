@@ -32,6 +32,16 @@
 - [ ] Contrast check on saturated canvas: dark ink channel primaries (#1f5a9c etc.) vs #efe3c4 track bg — eyeball + maybe nudge track bg lighter if notes feel muddy
 - [ ] Not eyeball-tested in browser yet (run `make dev`)
 
+## Feature: "codbox" theme group (4 new themes) — done
+- [x] Palettes pulled from monkeytype `frontend/src/ts/constants/themes.ts` (raw GitHub): viridescent, solarized_osaka, gruvbox_dark, watermelon
+- [x] ColorConfig: `viridescent`, `solarized osaka`, `gruvbox dark`, `watermelon` (full var set: surfaces, scrollbars, track bgs, oscilloscope, note-flash, disabled notes, comment-marker, 8 pitch / 5 noise / 4 mod channels)
+- [x] ThemePrompt: new `Codbox Themes` optgroup (Viridescent / Solarized Osaka / Gruvbox Dark / Watermelon), after Default Themes
+- [x] Renamed theme key `cod` → `cod salmon` (option label "Cod Salmon"); `ColorConfig.themeAliases` + `resolveThemeName` keeps old `localStorage.colorTheme == "cod"` working (ThemePrompt select + setTheme both resolve)
+- [x] tools/gen_codbox_themes.py — generates the 4 blocks (HSL lightness ladder 30/66/46/80 for channel/note colors); `--splice` rewrites the region in ColorConfig.ts in place
+- [x] tools/check_theme_contrast.py — WCAG contrast report per theme; all new themes ≥ 3.3:1 on channel colors (watermelon needed lighter ladder 32/70/50/84 + darker row bgs, was 2.55:1)
+- [ ] Not eyeballed in browser yet — `make dev`, cycle the Codbox group; gruvbox `--tonic`/`--fifth-note` and watermelon mute-button coral are the guesses most likely to want tuning
+- [x] solarized osaka v2 — faithful pass: surfaces are real osaka/solarized colors only (bg #00141a, sub-alt #00222b widgets, base02 #073642 focus/piano, base03 #002b36 page frame, base02 selection), and the 8 pitch channels ARE the solarized accent wheel (green/cyan/blue/violet/magenta/red/orange/yellow hexes verbatim as primary-channel + secondary-note); generator got an "accents" mode (palette hex per channel, secondary channel mixed 42% toward bg, primary note 50% toward base3); noise = solarized greys base00→base1 + two grey tints (base01 too dim for a channel tab)
+
 ## Tooling: Makefile for local testing — done
 - [x] `make check` (tsc --noEmit on all 3 configs), `make editor`, `make dev` (build+serve), `make watch` (poll loop, no entr/fswatch), `make debug` (debugify), `make player/synth/all/offline/clean/distclean`
 - [x] `tools/serve.py` — static server for website/ with Cache-Control: no-store (avoids stale bundle confusion); editor at /, unminified page at /index_debug.html, player at /player/

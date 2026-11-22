@@ -14,10 +14,10 @@ export interface ChannelColors extends BeepBoxOption {
 export class ColorConfig {
     public static colorLookup: Map<number, ChannelColors> = new Map<number, ChannelColors>();
 	public static usesColorFormula: boolean = false;
-	public static readonly defaultTheme: string = "cod";
+	public static readonly defaultTheme: string = "cod salmon";
     public static readonly themes: { [name: string]: string } = {
 	"dark classic": ``,
-        "cod": `
+        "cod salmon": `
 			:root {
 				/* bright saturated sand editor canvas + pale beige page frame, electric violet/cyan accents */
 				--page-margin: #f4eede;
@@ -143,6 +143,502 @@ export class ColorConfig {
 				box-shadow: inset 0 0 0 1px var(--input-box-outline);
 			}
 		`,
+		"viridescent": `
+			:root {
+				/* monkeytype 'viridescent' — sage/green on slate, peach accents */
+				--page-margin: #232828;
+				--editor-background: #2c3333;
+				--hover-preview: #b7c9b8;
+				--playhead: rgba(233, 245, 219, 0.65);
+				--primary-text: #e9f5db;
+				--secondary-text: #8fae95;
+				--inverted-text: #232828;
+				--error-text: #ff4646;
+				--text-selection: rgba(132, 169, 140, 0.55);
+				--box-selection-fill: rgba(149, 213, 178, 0.18);
+				--loop-accent: #95d5b2;
+				--link-accent: #f0d3c9;
+				--ui-widget-background: #343c3a;
+				--ui-widget-focus: #3e4a46;
+				--pitch-background: #384340;
+				--tonic: #4d6b5c;
+				--fifth-note: #3c5654;
+				--white-piano-key: #e9f5db;
+				--black-piano-key: #61796a;
+				--scrollbar-background: #232828;
+				--scrollbar-color: #84a98c;
+				--track-editor-bg-pitch: #394744;
+				--track-editor-bg-pitch-dim: #2f3b39;
+				--track-editor-bg-noise: #3b433d;
+				--track-editor-bg-noise-dim: #313833;
+				--track-editor-bg-mod: #39424c;
+				--track-editor-bg-mod-dim: #2f363f;
+				--multiplicative-mod-slider: #84a98c;
+				--overwriting-mod-slider: #bd4141;
+				--indicator-primary: #95d5b2;
+				--indicator-secondary: #5f8f78;
+				--select2-opt-group: #343c3a;
+				--input-box-outline: #1e2323;
+				--mute-button-normal: #f0d3c9;
+				--comment-marker: var(--mute-button-normal);
+				--mute-button-mod: #7fb0c9;
+				--note-flash: #ffffff;
+				--note-flash-secondary: rgba(255, 255, 255, 0.6);
+				--oscilloscope-line-L: #e9f5db;
+				--oscilloscope-line-R: #95d5b2;
+				--pitch-channel-limit: 8;
+				--noise-channel-limit: 5;
+				--mod-channel-limit: 4;
+				--disabled-note-primary: #6a7570;
+				--disabled-note-secondary: #4a534f;
+				/* channel colors: dark 30% -> light 80% lightness ladder */
+				--pitch1-secondary-channel:  #2a6f4c;
+				--pitch1-primary-channel:    #81cfa8;
+				--pitch1-secondary-note:     #41aa75;
+				--pitch1-primary-note:       #b8e0cc;
+				--pitch2-secondary-channel:  #2e6b5f;
+				--pitch2-primary-channel:    #86cbbd;
+				--pitch2-secondary-note:     #46a491;
+				--pitch2-primary-note:       #bbddd6;
+				--pitch3-secondary-channel:  #2c6d3c;
+				--pitch3-primary-channel:    #84cd96;
+				--pitch3-secondary-note:     #44a75d;
+				--pitch3-primary-note:       #badec3;
+				--pitch4-secondary-channel:  #2f656a;
+				--pitch4-primary-channel:    #87c4c9;
+				--pitch4-secondary-note:     #499aa2;
+				--pitch4-primary-note:       #bcdadc;
+				--pitch5-secondary-channel:  #476b2e;
+				--pitch5-primary-channel:    #a3cb86;
+				--pitch5-secondary-note:     #6da446;
+				--pitch5-primary-note:       #c9ddbb;
+				--pitch6-secondary-channel:  #2f516a;
+				--pitch6-primary-channel:    #87aec9;
+				--pitch6-secondary-note:     #497da2;
+				--pitch6-primary-note:       #bccfdc;
+				--pitch7-secondary-channel:  #366336;
+				--pitch7-primary-channel:    #8ec28e;
+				--pitch7-secondary-note:     #529852;
+				--pitch7-primary-note:       #bfd9bf;
+				--pitch8-secondary-channel:  #396053;
+				--pitch8-primary-channel:    #93beb0;
+				--pitch8-secondary-note:     #58937f;
+				--pitch8-primary-note:       #c1d7d0;
+
+				--noise1-secondary-channel:  #435650;
+				--noise1-primary-channel:    #9eb3ac;
+				--noise1-secondary-note:     #67837a;
+				--noise1-primary-note:       #c7d1ce;
+				--noise2-secondary-channel:  #574c42;
+				--noise2-primary-channel:    #b4a89c;
+				--noise2-secondary-note:     #867565;
+				--noise2-primary-note:       #d2ccc6;
+				--noise3-secondary-channel:  #434c56;
+				--noise3-primary-channel:    #9ea8b3;
+				--noise3-secondary-note:     #677583;
+				--noise3-primary-note:       #c7ccd1;
+				--noise4-secondary-channel:  #4a5445;
+				--noise4-primary-channel:    #a5b1a0;
+				--noise4-secondary-note:     #71816a;
+				--noise4-primary-note:       #cbd0c8;
+				--noise5-secondary-channel:  #534646;
+				--noise5-primary-channel:    #afa1a1;
+				--noise5-secondary-note:     #7f6c6c;
+				--noise5-primary-note:       #cfc9c9;
+
+				--mod1-secondary-channel:  #345565;
+				--mod1-primary-channel:    #8db2c4;
+				--mod1-secondary-note:     #50829b;
+				--mod1-primary-note:       #bed1da;
+				--mod2-secondary-channel:  #376245;
+				--mod2-primary-channel:    #90c1a0;
+				--mod2-secondary-note:     #54966a;
+				--mod2-primary-note:       #c0d8c8;
+				--mod3-secondary-channel:  #39605a;
+				--mod3-primary-channel:    #92bfb7;
+				--mod3-secondary-note:     #57948a;
+				--mod3-primary-note:       #c1d7d4;
+				--mod4-secondary-channel:  #3f6039;
+				--mod4-primary-channel:    #99bf92;
+				--mod4-secondary-note:     #619457;
+				--mod4-primary-note:       #c4d7c1;
+			}
+			.beepboxEditor button, .beepboxEditor select {
+				box-shadow: inset 0 0 0 1px var(--input-box-outline);
+			}
+			`,
+		"solarized osaka": `
+			:root {
+				/* monkeytype 'solarized_osaka' — solarized dark wheel on the osaka near-black teal page */
+				--page-margin: #002b36;
+				--editor-background: #00141a;
+				--hover-preview: #93a1a1;
+				--playhead: rgba(238, 232, 213, 0.8);
+				--primary-text: #eee8d5;
+				--secondary-text: #839496;
+				--inverted-text: #002b36;
+				--error-text: #dc322f;
+				--text-selection: rgba(7, 54, 66, 0.92);
+				--box-selection-fill: rgba(38, 139, 210, 0.25);
+				--loop-accent: #2aa198;
+				--link-accent: #268bd2;
+				--ui-widget-background: #00222b;
+				--ui-widget-focus: #073642;
+				--pitch-background: #002b36;
+				--tonic: #6d5a0a;
+				--fifth-note: #15557f;
+				--white-piano-key: #eee8d5;
+				--black-piano-key: #073642;
+				--scrollbar-background: #00222b;
+				--scrollbar-color: #2aa198;
+				--track-editor-bg-pitch: #04252e;
+				--track-editor-bg-pitch-dim: #001a21;
+				--track-editor-bg-noise: #0d2d2b;
+				--track-editor-bg-noise-dim: #08221f;
+				--track-editor-bg-mod: #0f2d3e;
+				--track-editor-bg-mod-dim: #0a2230;
+				--multiplicative-mod-slider: #268bd2;
+				--overwriting-mod-slider: #cb4b16;
+				--indicator-primary: #2aa198;
+				--indicator-secondary: #b58900;
+				--select2-opt-group: #00222b;
+				--input-box-outline: #00141a;
+				--mute-button-normal: #b58900;
+				--comment-marker: var(--mute-button-normal);
+				--mute-button-mod: #d33682;
+				--note-flash: #ffffff;
+				--note-flash-secondary: rgba(255, 255, 255, 0.6);
+				--oscilloscope-line-L: #eee8d5;
+				--oscilloscope-line-R: #2aa198;
+				--pitch-channel-limit: 8;
+				--noise-channel-limit: 5;
+				--mod-channel-limit: 4;
+				--disabled-note-primary: #586e75;
+				--disabled-note-secondary: #073642;
+				/* channel colors: one palette hex per channel, darkened toward #00141a and lightened toward #fdf6e3 */
+				--pitch1-secondary-channel:  #4d610b;
+				--pitch1-primary-channel:    #859900;
+				--pitch1-secondary-note:     #859900;
+				--pitch1-primary-note:       #c1c872;
+				--pitch2-secondary-channel:  #186663;
+				--pitch2-primary-channel:    #2aa198;
+				--pitch2-secondary-note:     #2aa198;
+				--pitch2-primary-note:       #94ccbe;
+				--pitch3-secondary-channel:  #165985;
+				--pitch3-primary-channel:    #268bd2;
+				--pitch3-secondary-note:     #268bd2;
+				--pitch3-primary-note:       #92c0da;
+				--pitch4-secondary-channel:  #3f4a7d;
+				--pitch4-primary-channel:    #6c71c4;
+				--pitch4-secondary-note:     #6c71c4;
+				--pitch4-primary-note:       #b4b4d4;
+				--pitch5-secondary-channel:  #7a2856;
+				--pitch5-primary-channel:    #d33682;
+				--pitch5-secondary-note:     #d33682;
+				--pitch5-primary-note:       #e896b2;
+				--pitch6-secondary-channel:  #802526;
+				--pitch6-primary-channel:    #dc322f;
+				--pitch6-secondary-note:     #dc322f;
+				--pitch6-primary-note:       #ec9489;
+				--pitch7-secondary-channel:  #763418;
+				--pitch7-primary-channel:    #cb4b16;
+				--pitch7-secondary-note:     #cb4b16;
+				--pitch7-primary-note:       #e4a07c;
+				--pitch8-secondary-channel:  #69580b;
+				--pitch8-primary-channel:    #b58900;
+				--pitch8-secondary-note:     #b58900;
+				--pitch8-primary-note:       #d9c072;
+
+				--noise1-secondary-channel:  #3b5057;
+				--noise1-primary-channel:    #657b83;
+				--noise1-secondary-note:     #657b83;
+				--noise1-primary-note:       #b1b8b3;
+				--noise2-secondary-channel:  #4c5e62;
+				--noise2-primary-channel:    #839496;
+				--noise2-secondary-note:     #839496;
+				--noise2-primary-note:       #c0c5bc;
+				--noise3-secondary-channel:  #556668;
+				--noise3-primary-channel:    #93a1a1;
+				--noise3-secondary-note:     #93a1a1;
+				--noise3-primary-note:       #c8ccc2;
+				--noise4-secondary-channel:  #4b533c;
+				--noise4-primary-channel:    #818055;
+				--noise4-secondary-note:     #818055;
+				--noise4-primary-note:       #bfbb9c;
+				--noise5-secondary-channel:  #2c5369;
+				--noise5-primary-channel:    #4c81a3;
+				--noise5-secondary-note:     #4c81a3;
+				--noise5-primary-note:       #a4bcc3;
+
+				--mod1-secondary-channel:  #3f4a7d;
+				--mod1-primary-channel:    #6c71c4;
+				--mod1-secondary-note:     #6c71c4;
+				--mod1-primary-note:       #b4b4d4;
+				--mod2-secondary-channel:  #165985;
+				--mod2-primary-channel:    #268bd2;
+				--mod2-secondary-note:     #268bd2;
+				--mod2-primary-note:       #92c0da;
+				--mod3-secondary-channel:  #186663;
+				--mod3-primary-channel:    #2aa198;
+				--mod3-secondary-note:     #2aa198;
+				--mod3-primary-note:       #94ccbe;
+				--mod4-secondary-channel:  #7a2856;
+				--mod4-primary-channel:    #d33682;
+				--mod4-secondary-note:     #d33682;
+				--mod4-primary-note:       #e896b2;
+			}
+			.beepboxEditor button, .beepboxEditor select {
+				box-shadow: inset 0 0 0 1px var(--input-box-outline);
+			}
+			`,
+		"gruvbox dark": `
+			:root {
+				/* monkeytype 'gruvbox_dark' — warm grey bgs, gruvbox bright accents */
+				--page-margin: #1d2021;
+				--editor-background: #282828;
+				--hover-preview: #bdae93;
+				--playhead: rgba(235, 219, 178, 0.65);
+				--primary-text: #ebdbb2;
+				--secondary-text: #a89984;
+				--inverted-text: #282828;
+				--error-text: #fb4934;
+				--text-selection: rgba(180, 142, 73, 0.55);
+				--box-selection-fill: rgba(235, 219, 178, 0.16);
+				--loop-accent: #fabd2f;
+				--link-accent: #83a598;
+				--ui-widget-background: #3c3836;
+				--ui-widget-focus: #504945;
+				--pitch-background: #32302f;
+				--tonic: #6b5a2c;
+				--fifth-note: #4c5a4a;
+				--white-piano-key: #ebdbb2;
+				--black-piano-key: #665c54;
+				--scrollbar-background: #282828;
+				--scrollbar-color: #665c54;
+				--track-editor-bg-pitch: #32302f;
+				--track-editor-bg-pitch-dim: #282623;
+				--track-editor-bg-noise: #36332f;
+				--track-editor-bg-noise-dim: #2c2a26;
+				--track-editor-bg-mod: #2f3334;
+				--track-editor-bg-mod-dim: #25292a;
+				--multiplicative-mod-slider: #83a598;
+				--overwriting-mod-slider: #af3a03;
+				--indicator-primary: #fabd2f;
+				--indicator-secondary: #d79921;
+				--select2-opt-group: #3c3836;
+				--input-box-outline: #1d2021;
+				--mute-button-normal: #fe8019;
+				--comment-marker: var(--mute-button-normal);
+				--mute-button-mod: #d38696;
+				--note-flash: #ffffff;
+				--note-flash-secondary: rgba(255, 255, 255, 0.6);
+				--oscilloscope-line-L: #ebdbb2;
+				--oscilloscope-line-R: #fabd2f;
+				--pitch-channel-limit: 8;
+				--noise-channel-limit: 5;
+				--mod-channel-limit: 4;
+				--disabled-note-primary: #7c6f64;
+				--disabled-note-secondary: #5a524c;
+				/* channel colors: dark 30% -> light 80% lightness ladder */
+				--pitch1-secondary-channel:  #841d15;
+				--pitch1-primary-channel:    #e7726a;
+				--pitch1-secondary-note:     #ca2c21;
+				--pitch1-primary-note:       #ebb1ad;
+				--pitch2-secondary-channel:  #8e420b;
+				--pitch2-primary-channel:    #f29c5f;
+				--pitch2-secondary-note:     #d96512;
+				--pitch2-primary-note:       #f1c6a7;
+				--pitch3-secondary-channel:  #906509;
+				--pitch3-primary-channel:    #f5c45c;
+				--pitch3-secondary-note:     #dd9b0e;
+				--pitch3-primary-note:       #f2daa6;
+				--pitch4-secondary-channel:  #757722;
+				--pitch4-primary-channel:    #d6d879;
+				--pitch4-secondary-note:     #b4b635;
+				--pitch4-primary-note:       #e3e4b4;
+				--pitch5-secondary-channel:  #3f6a2f;
+				--pitch5-primary-channel:    #99c987;
+				--pitch5-secondary-note:     #60a249;
+				--pitch5-primary-note:       #c4dcbc;
+				--pitch6-secondary-channel:  #3c5d55;
+				--pitch6-primary-channel:    #96bbb2;
+				--pitch6-secondary-note:     #5d8e82;
+				--pitch6-primary-note:       #c3d5d1;
+				--pitch7-secondary-channel:  #6d2c44;
+				--pitch7-primary-channel:    #cd849f;
+				--pitch7-secondary-note:     #a74468;
+				--pitch7-primary-note:       #debac7;
+				--pitch8-secondary-channel:  #6b5c2e;
+				--pitch8-primary-channel:    #cbba86;
+				--pitch8-secondary-note:     #a48d46;
+				--pitch8-primary-note:       #ddd5bb;
+
+				--noise1-secondary-channel:  #5a533f;
+				--noise1-primary-channel:    #b8b099;
+				--noise1-secondary-note:     #8a8060;
+				--noise1-primary-note:       #d4d0c4;
+				--noise2-secondary-channel:  #594a40;
+				--noise2-primary-channel:    #b6a69a;
+				--noise2-secondary-note:     #887263;
+				--noise2-primary-note:       #d3cbc5;
+				--noise3-secondary-channel:  #435056;
+				--noise3-primary-channel:    #9eacb3;
+				--noise3-secondary-note:     #677a83;
+				--noise3-primary-note:       #c7ced1;
+				--noise4-secondary-channel:  #56434b;
+				--noise4-primary-channel:    #b39ea7;
+				--noise4-secondary-note:     #836773;
+				--noise4-primary-note:       #d1c7cb;
+				--noise5-secondary-channel:  #4c5643;
+				--noise5-primary-channel:    #a8b39e;
+				--noise5-secondary-note:     #758367;
+				--noise5-primary-note:       #ccd1c7;
+
+				--mod1-secondary-channel:  #3a5f56;
+				--mod1-primary-channel:    #93bdb3;
+				--mod1-secondary-note:     #599184;
+				--mod1-primary-note:       #c2d6d2;
+				--mod2-secondary-channel:  #775c22;
+				--mod2-primary-channel:    #d8ba79;
+				--mod2-secondary-note:     #b68d35;
+				--mod2-primary-note:       #e4d5b4;
+				--mod3-secondary-channel:  #633646;
+				--mod3-primary-channel:    #c28ea1;
+				--mod3-secondary-note:     #98526c;
+				--mod3-primary-note:       #d9bfc9;
+				--mod4-secondary-channel:  #666732;
+				--mod4-primary-channel:    #c6c78a;
+				--mod4-secondary-note:     #9d9e4c;
+				--mod4-primary-note:       #dbdbbd;
+			}
+			.beepboxEditor button, .beepboxEditor select {
+				box-shadow: inset 0 0 0 1px var(--input-box-outline);
+			}
+			`,
+		"watermelon": `
+			:root {
+				/* monkeytype 'watermelon' — rind green page, melon red/pink channels */
+				--page-margin: #163026;
+				--editor-background: #1f4437;
+				--hover-preview: #b7d0c3;
+				--playhead: rgba(205, 198, 188, 0.65);
+				--primary-text: #cdc6bc;
+				--secondary-text: #8fb3a3;
+				--inverted-text: #1f4437;
+				--error-text: #f0545c;
+				--text-selection: rgba(214, 104, 111, 0.5);
+				--box-selection-fill: rgba(214, 104, 111, 0.20);
+				--loop-accent: #e08088;
+				--link-accent: #f0908f;
+				--ui-widget-background: #244d3f;
+				--ui-widget-focus: #3e7a65;
+				--pitch-background: #2a5445;
+				--tonic: #8a555b;
+				--fifth-note: #4f8a72;
+				--white-piano-key: #f2ece0;
+				--black-piano-key: #3e7a65;
+				--scrollbar-background: #244d3f;
+				--scrollbar-color: #d6686f;
+				--track-editor-bg-pitch: #265140;
+				--track-editor-bg-pitch-dim: #1f4234;
+				--track-editor-bg-noise: #2d5746;
+				--track-editor-bg-noise-dim: #25483b;
+				--track-editor-bg-mod: #27505b;
+				--track-editor-bg-mod-dim: #1f414c;
+				--multiplicative-mod-slider: #6fb3a0;
+				--overwriting-mod-slider: #d6686f;
+				--indicator-primary: #d6686f;
+				--indicator-secondary: #3e7a65;
+				--select2-opt-group: #244d3f;
+				--input-box-outline: #163026;
+				--mute-button-normal: #e88f72;
+				--comment-marker: var(--mute-button-normal);
+				--mute-button-mod: #9fd0c5;
+				--note-flash: #ffffff;
+				--note-flash-secondary: rgba(255, 255, 255, 0.6);
+				--oscilloscope-line-L: #cdc6bc;
+				--oscilloscope-line-R: #d6686f;
+				--pitch-channel-limit: 8;
+				--noise-channel-limit: 5;
+				--mod-channel-limit: 4;
+				--disabled-note-primary: #6f8478;
+				--disabled-note-secondary: #4f6259;
+				/* channel colors: dark 32% -> light 84% lightness ladder */
+				--pitch1-secondary-channel:  #7e252b;
+				--pitch1-primary-channel:    #dd888e;
+				--pitch1-secondary-note:     #c63943;
+				--pitch1-primary-note:       #e9c3c6;
+				--pitch2-secondary-channel:  #871d25;
+				--pitch2-primary-channel:    #e48189;
+				--pitch2-secondary-note:     #d22d3a;
+				--pitch2-primary-note:       #edc0c3;
+				--pitch3-secondary-channel:  #7a2929;
+				--pitch3-primary-channel:    #d98c8c;
+				--pitch3-secondary-note:     #bf4040;
+				--pitch3-primary-note:       #e8c5c5;
+				--pitch4-secondary-channel:  #356e48;
+				--pitch4-primary-channel:    #98cdaa;
+				--pitch4-secondary-note:     #53ac71;
+				--pitch4-primary-note:       #cae2d2;
+				--pitch5-secondary-channel:  #527231;
+				--pitch5-primary-channel:    #b2d194;
+				--pitch5-secondary-note:     #80b24c;
+				--pitch5-primary-note:       #d6e4c8;
+				--pitch6-secondary-channel:  #6a762d;
+				--pitch6-primary-channel:    #c9d590;
+				--pitch6-secondary-note:     #a6b946;
+				--pitch6-primary-note:       #e1e6c7;
+				--pitch7-secondary-channel:  #7e4a25;
+				--pitch7-primary-channel:    #ddab88;
+				--pitch7-secondary-note:     #c67439;
+				--pitch7-primary-note:       #e9d3c3;
+				--pitch8-secondary-channel:  #723152;
+				--pitch8-primary-channel:    #d194b2;
+				--pitch8-secondary-note:     #b24c80;
+				--pitch8-primary-note:       #e4c8d6;
+
+				--noise1-secondary-channel:  #5d5446;
+				--noise1-primary-channel:    #bdb4a8;
+				--noise1-secondary-note:     #91826e;
+				--noise1-primary-note:       #dbd7d1;
+				--noise2-secondary-channel:  #485b52;
+				--noise2-primary-channel:    #a9bcb2;
+				--noise2-secondary-note:     #708f80;
+				--noise2-primary-note:       #d2dad6;
+				--noise3-secondary-channel:  #5a4949;
+				--noise3-primary-channel:    #baabab;
+				--noise3-secondary-note:     #8c7373;
+				--noise3-primary-note:       #dad3d3;
+				--noise4-secondary-channel:  #48555b;
+				--noise4-primary-channel:    #a9b6bc;
+				--noise4-secondary-note:     #70858f;
+				--noise4-primary-note:       #d2d8da;
+				--noise5-secondary-channel:  #505a49;
+				--noise5-primary-channel:    #b1baab;
+				--noise5-secondary-note:     #7d8c73;
+				--noise5-primary-note:       #d6dad3;
+
+				--mod1-secondary-channel:  #396a66;
+				--mod1-primary-channel:    #9cc9c6;
+				--mod1-secondary-note:     #59a69f;
+				--mod1-primary-note:       #cce1df;
+				--mod2-secondary-channel:  #37526c;
+				--mod2-primary-channel:    #9ab2cb;
+				--mod2-secondary-note:     #5780a8;
+				--mod2-primary-note:       #cbd6e1;
+				--mod3-secondary-channel:  #3c674b;
+				--mod3-primary-channel:    #9fc6ac;
+				--mod3-secondary-note:     #5ea174;
+				--mod3-primary-note:       #cddfd3;
+				--mod4-secondary-channel:  #683b52;
+				--mod4-primary-channel:    #c89db2;
+				--mod4-secondary-note:     #a35c80;
+				--mod4-primary-note:       #e0ccd6;
+			}
+			.beepboxEditor button, .beepboxEditor select {
+				box-shadow: inset 0 0 0 1px var(--input-box-outline);
+			}
+			`,
         "dark competition": `
 				:root {
 					--hover-preview: #ddd;
@@ -5721,6 +6217,16 @@ export class ColorConfig {
 	"custom": `${localStorage.getItem("customColors") || `:root {  }`}`,
     };
 
+    // renamed themes: old saved names (localStorage / song prefs) keep working
+    public static readonly themeAliases: { [oldName: string]: string } = {
+        "cod": "cod salmon",
+    };
+
+    public static resolveThemeName(name: string): string {
+        if (this.themes[name] === undefined && this.themeAliases[name] !== undefined) return this.themeAliases[name];
+        return name;
+    }
+
     public static readonly pageMargin: string = "var(--page-margin, black)";
     public static readonly editorBackground: string = "var(--editor-background, black)";
     public static readonly hoverPreview: string = "var(--hover-preview, white)";
@@ -6262,6 +6768,7 @@ export class ColorConfig {
     private static readonly _styleElement: HTMLStyleElement = document.head.appendChild(HTML.style({ type: "text/css" }));
 
     public static setTheme(name: string): void {
+		name = ColorConfig.resolveThemeName(name);
 		let theme: string = this.themes[name];
 		if (theme == undefined) theme = ColorConfig.defaultTheme;
 		this._styleElement.textContent = theme;
