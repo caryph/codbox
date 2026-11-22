@@ -14,9 +14,135 @@ export interface ChannelColors extends BeepBoxOption {
 export class ColorConfig {
     public static colorLookup: Map<number, ChannelColors> = new Map<number, ChannelColors>();
 	public static usesColorFormula: boolean = false;
-	public static readonly defaultTheme: string = "ultrabox dark";
+	public static readonly defaultTheme: string = "cod";
     public static readonly themes: { [name: string]: string } = {
 	"dark classic": ``,
+        "cod": `
+			:root {
+				/* bright saturated sand editor canvas + pale beige page frame, electric violet/cyan accents */
+				--page-margin: #f4eede;
+				--editor-background: #e6d3a8;
+				--hover-preview: #5f5744;
+				--playhead: rgba(38, 32, 22, 0.7);
+				--primary-text: #35301f;
+				--secondary-text: #7a7057;
+				--inverted-text: #fbf7ec;
+				--error-text: #b8342c;
+				--text-selection: rgba(140, 120, 255, 0.5);
+				--box-selection-fill: rgba(74, 47, 216, 0.15);
+				--loop-accent: #5f43e0;
+				--link-accent: #4a2fd8;
+				--ui-widget-background: #f3ecd8;
+				--ui-widget-focus: #e9dfc4;
+				--pitch-background: #eaddbb;
+				--tonic: #b08ff0;
+				--fifth-note: #8ed8e0;
+				--white-piano-key: #fffdf6;
+				--black-piano-key: #5f5744;
+				--scrollbar-background: #f3ecd8;
+				--scrollbar-color: #c2a463;
+				--track-editor-bg-pitch: #efe3c4;
+				--track-editor-bg-pitch-dim: #e4d6b0;
+				--track-editor-bg-noise: #ece0c6;
+				--track-editor-bg-noise-dim: #e0d3b4;
+				--track-editor-bg-mod: #e2dcee;
+				--track-editor-bg-mod-dim: #d5cde4;
+				--multiplicative-mod-slider: #5568b8;
+				--overwriting-mod-slider: #b8752f;
+				--indicator-primary: #4a2fd8;
+				--indicator-secondary: #a99bf0;
+				--select2-opt-group: #f3ecd8;
+				--input-box-outline: #c8ad74;
+				--mute-button-normal: #c9902f;
+				--comment-marker: var(--mute-button-normal);
+				--mute-button-mod: #6f4fd8;
+				--note-flash: #ffffff;
+				--note-flash-secondary: rgba(255, 255, 255, 0.6);
+				--oscilloscope-line-L: #35301f;
+				--oscilloscope-line-R: #4a2fd8;
+				--pitch-channel-limit: 8;
+				--noise-channel-limit: 5;
+				--mod-channel-limit: 4;
+
+				/* light theme: secondary = pale, primary = saturated ink (readable on sand) */
+				/* pitch: blue, indigo, violet, cyan, orchid, steel, purple, periwinkle */
+				--pitch1-secondary-channel:  #7fc0f0;
+				--pitch1-primary-channel:    #2b6fb8;
+				--pitch1-secondary-note:     #5a9ad8;
+				--pitch1-primary-note:       #1f5a9c;
+				--pitch2-secondary-channel:  #9a9af0;
+				--pitch2-primary-channel:    #4646b8;
+				--pitch2-secondary-note:     #7a7ae0;
+				--pitch2-primary-note:       #33339c;
+				--pitch3-secondary-channel:  #c08ff0;
+				--pitch3-primary-channel:    #7a3fc0;
+				--pitch3-secondary-note:     #a66fd8;
+				--pitch3-primary-note:       #63289c;
+				--pitch4-secondary-channel:  #74d0e8;
+				--pitch4-primary-channel:    #14768f;
+				--pitch4-secondary-note:     #47a8c4;
+				--pitch4-primary-note:       #0d5770;
+				--pitch5-secondary-channel:  #e290e8;
+				--pitch5-primary-channel:    #a63fae;
+				--pitch5-secondary-note:     #cc68cc;
+				--pitch5-primary-note:       #8a2894;
+				--pitch6-secondary-channel:  #a8b4e0;
+				--pitch6-primary-channel:    #46538f;
+				--pitch6-secondary-note:     #7786b8;
+				--pitch6-primary-note:       #313d6f;
+				--pitch7-secondary-channel:  #b490f0;
+				--pitch7-primary-channel:    #5b34b0;
+				--pitch7-secondary-note:     #9168d0;
+				--pitch7-primary-note:       #46248c;
+				--pitch8-secondary-channel:  #a0b4f0;
+				--pitch8-primary-channel:    #3a56b0;
+				--pitch8-secondary-note:     #7590d8;
+				--pitch8-primary-note:       #2a4290;
+
+				/* noise: warm/cool greys, dark primaries so they don't vanish into sand */
+				--noise1-secondary-channel:  #d8ccae;
+				--noise1-primary-channel:    #7d7459;
+				--noise1-secondary-note:     #bfb494;
+				--noise1-primary-note:       #625a42;
+				--noise2-secondary-channel:  #cdd3da;
+				--noise2-primary-channel:    #646f7b;
+				--noise2-secondary-note:     #b2bac3;
+				--noise2-primary-note:       #4b5662;
+				--noise3-secondary-channel:  #d8cbd4;
+				--noise3-primary-channel:    #7b6672;
+				--noise3-secondary-note:     #bfaeb8;
+				--noise3-primary-note:       #5f4d58;
+				--noise4-secondary-channel:  #cad6cc;
+				--noise4-primary-channel:    #5f7366;
+				--noise4-secondary-note:     #a9bbb0;
+				--noise4-primary-note:       #45584d;
+				--noise5-secondary-channel:  #d6d0dc;
+				--noise5-primary-channel:    #6c6375;
+				--noise5-secondary-note:     #b8aec0;
+				--noise5-primary-note:       #52495b;
+
+				/* mod: blue/violet, slightly muted vs pitch */
+				--mod1-secondary-channel:  #a4b8f0;
+				--mod1-primary-channel:    #3a5aa8;
+				--mod1-secondary-note:     #7f96d0;
+				--mod1-primary-note:       #28447e;
+				--mod2-secondary-channel:  #b8a4f0;
+				--mod2-primary-channel:    #5840a8;
+				--mod2-secondary-note:     #917ad0;
+				--mod2-primary-note:       #422e7e;
+				--mod3-secondary-channel:  #8fd2e8;
+				--mod3-primary-channel:    #1f6a86;
+				--mod3-secondary-note:     #5da8c2;
+				--mod3-primary-note:       #124c62;
+				--mod4-secondary-channel:  #d0a0e8;
+				--mod4-primary-channel:    #7a44a4;
+				--mod4-secondary-note:     #ac76c8;
+				--mod4-primary-note:       #602e84;
+			}
+			.beepboxEditor button, .beepboxEditor select {
+				box-shadow: inset 0 0 0 1px var(--input-box-outline);
+			}
+		`,
         "dark competition": `
 				:root {
 					--hover-preview: #ddd;
@@ -6159,6 +6285,8 @@ export class ColorConfig {
 		if (getComputedStyle(this._styleElement).getPropertyValue("--editor-background") == "") valuesToAdd += "--editor-background:black;";
 		if (getComputedStyle(this._styleElement).getPropertyValue("--ui-widget-background") == "") valuesToAdd += "--ui-widget-background:#444;";
 		if (getComputedStyle(this._styleElement).getPropertyValue("--loop-accent") == "") valuesToAdd += "--loop-accent:#74f;";
+		// comment marker triangle in the track view follows the theme, never a fixed color
+		if (getComputedStyle(this._styleElement).getPropertyValue("--comment-marker") == "") valuesToAdd += "--comment-marker:var(--link-accent,#74f);";
 		// if (getComputedStyle(this._styleElement).getPropertyValue("--link-accent") == "") valuesToAdd += "--link-accent:#9c64f7;";
 		// if (getComputedStyle(this._styleElement).getPropertyValue("--mod-title") == "") valuesToAdd += "--mod-title:var(--link-accent);";
 		if (getComputedStyle(this._styleElement).getPropertyValue("--box-selection-fill") == "") valuesToAdd += "--box-selection-fill:rgba(255,255,255,0.2);";

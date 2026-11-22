@@ -11,6 +11,7 @@ const { button, div, h2, select, option, optgroup } = HTML;
 export class ThemePrompt implements Prompt {
 	private readonly _themeSelect: HTMLSelectElement = select({ style: "width: 100%;" },
 		optgroup({ label: "Default Themes" },
+			option({ value: "cod" }, "Cod"),
 			option({ value: "ultrabox dark" }, "UltraBox"),
 			option({ value: "forest" }, "Forest"),
 			option({ value: "canyon" }, "Canyon"),

@@ -16,3 +16,4 @@
 /**/*.html.bak
 /build
 /to_deploy/
+.build-stamp

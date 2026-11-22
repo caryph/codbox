@@ -1338,7 +1338,7 @@ html {
 	right: 0;
 	width: 0;
 	height: 0;
-	border-top: 11px solid #ffaa00;
+	border-top: 11px solid var(--comment-marker);
 	border-left: 11px solid transparent;
 	pointer-events: none;
 }
